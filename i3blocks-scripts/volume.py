@@ -27,20 +27,26 @@ vol = int((leftVol + rightVol) / 2)
 
 # Defines status as muted, headphones plugged or normal status
 if (leftStatus == 'off') & (rightStatus == 'off'):
-   status = 'off'
-elif headphones == 'on':
-   status = 'headphones'
+   mute = 'on'
 else:
-   status='on'
+   mute = 'off'
+if headphones == 'on':
+   device = 'headphones'
+else:
+   device='speakers'
 
 # Returns propper FontAwesome icon depending on current status
-def icon(status):
-   if status == 'on':
+def icon(device):
+   if device == 'speakers':
       return '\uf028'
-   if status == 'off':
-      return '\uf00d'
-   if status == 'headphones':
+   if device == 'headphones':
       return '\uf025'
    return '\uf128'
+def color(mute):
+   if mute == 'on':
+      return '#FF0000'
+   else:
+      return '#FFFFFF'
 
-print('<span font="FontAwesome">{}</span>{:>3}%'.format(icon(status), vol))
+
+print('<span font="FontAwesome" color="{}">{}</span>{:>3}%'.format(color(mute), icon(device), vol))
