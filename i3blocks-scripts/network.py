@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+# Config proper device names
+###########################
+wirelessDevice = 'wifi0'  #
+ethernetDevice = 'net0'   #
+###########################
 from subprocess import check_output
 file=open('/sys/class/net/wifi0/operstate')
 wifiState = file.read().split('\n')[0];
@@ -8,7 +13,7 @@ ethState = file.read().split('\n')[0];
 file.close()
 # If wifi is up we get its ip and ssid
 if wifiState == 'up':
-   aux = check_output(['ip', 'addr', 'show', 'wifi0'], universal_newlines=True).split('\n')
+   aux = check_output(['ip', 'addr', 'show', wirelessDevice], universal_newlines=True).split('\n')
    wifiIp = '&lt;uncknown ip&gt;'
    for line in aux:
       if line.find('inet ') != -1:
@@ -24,7 +29,7 @@ if wifiState == 'up':
          wifiSignal = int(line.split(':')[1])
 # If eth link is up we get its ip
 if ethState == 'up':
-   aux = check_output(['ip', 'addr', 'show', 'net0'], universal_newlines=True).split('\n')
+   aux = check_output(['ip', 'addr', 'show', ethernetDevice], universal_newlines=True).split('\n')
    for line in aux:
       if line.find('inet') != -1:
          ethIp = line.split('inet ')[1].split('/')[0]
