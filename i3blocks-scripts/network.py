@@ -5,10 +5,10 @@ wirelessDevice = 'wifi0'  #
 ethernetDevice = 'net0'   #
 ###########################
 from subprocess import check_output
-file=open('/sys/class/net/wifi0/operstate')
+file=open('/sys/class/net/' + wirelessDevice + '/operstate')
 wifiState = file.read().split('\n')[0];
 file.close()
-file=open('/sys/class/net/net0/operstate')
+file=open('/sys/class/net/' + ethernetDevice + '/operstate')
 ethState = file.read().split('\n')[0];
 file.close()
 # If wifi is up we get its ip and ssid
@@ -53,7 +53,7 @@ def color(percent):
       return "#CCFF00"
   return "#00FF00"
 if (wifiState == 'down') & (ethState == 'down'):
-   output = '<span color="red"><span font="FontAwesome">\uf00d</span>NOT CONNECTED</span>'
+   output = '<span color="red"><span font="FontAwesome">\uf00d</span> NOT CONNECTED</span>'
 if wifiState == 'up':
    output += '<span font="FontAwesome">\uf1eb</span> {} (<span color="{}">{}%</span>) {}'.format(wifiSsid, color(wifiSignal), wifiSignal, wifiIp)
 if ethState == 'up':
