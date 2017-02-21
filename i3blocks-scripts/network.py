@@ -5,6 +5,7 @@ wirelessDevice = 'wifi0'  #
 ethernetDevice = 'net0'   #
 ###########################
 from subprocess import check_output
+import re
 file=open('/sys/class/net/' + wirelessDevice + '/operstate')
 wifiState = file.read().split('\n')[0];
 file.close()
@@ -13,26 +14,26 @@ ethState = file.read().split('\n')[0];
 file.close()
 # If wifi is up we get its ip and ssid
 if wifiState == 'up':
-   aux = check_output(['ip', 'addr', 'show', wirelessDevice], universal_newlines=True).split('\n')
+   aux = check_output(['ip', 'addr', 'show', wirelessDevice], universal_newlines=True)
    wifiIp = '&lt;uncknown ip&gt;'
-   for line in aux:
-      if line.find('inet ') != -1:
-         wifiIp = line.split('inet ')[1].split('/')[0]
-   aux = check_output(['nmcli', '-t', '-f', 'active,ssid', 'dev', 'wifi'], universal_newlines=True).split('\n')
+   match = re.search(r'inet ([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*)/', aux)
+   if match:
+      wifiIp = match.group(1);
+   aux = check_output(['nmcli', '-t', '-f', 'active,ssid', 'dev', 'wifi'], universal_newlines=True)
    wifiSsid = '&lt;uncknown ssid&gt;'
-   for line in aux:
-      if line.find('sí') != -1:
-         wifiSsid = line.split(':')[1]
-   aux = check_output(['nmcli', '-t', '-f', 'active,signal', 'dev', 'wifi'], universal_newlines=True).split('\n') 
-   for line in aux:
-      if line.find('sí') != -1:
-         wifiSignal = int(line.split(':')[1])
+   match = re.search('^(sí|yes):(.*)', aux)
+   if match:
+      wifiSsid = match.group(2);
+   aux = check_output(['nmcli', '-t', '-f', 'active,signal', 'dev', 'wifi'], universal_newlines=True)
+   match = re.search('^(sí|yes):([0-9]*)', aux)
+   if match:
+      wifiSignal = int(match.group(2));
 # If eth link is up we get its ip
 if ethState == 'up':
-   aux = check_output(['ip', 'addr', 'show', ethernetDevice], universal_newlines=True).split('\n')
-   for line in aux:
-      if line.find('inet') != -1:
-         ethIp = line.split('inet ')[1].split('/')[0]
+   aux = check_output(['ip', 'addr', 'show', ethernetDevice], universal_newlines=True)
+   match = re.search('inet ([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*)/', aux)
+   if match:
+      ethIp = match.group(1);
 output=''
 def color(percent):
   if percent < 10:
