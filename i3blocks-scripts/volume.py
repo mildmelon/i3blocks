@@ -3,25 +3,24 @@
 # and if headphones are plugged with a FontAwesome icon and a 
 # volume percentage using amixer
 from subprocess import check_output
+import re
 # Get amixer output 
-output = check_output(['amixer', 'get', 'Master'], universal_newlines=True).split('\n')
+aux = check_output(['amixer', 'get', 'Master'], universal_newlines=True)
+output = re.search('Front Left:[A-z,0-9,\s]*\[([0-9]*)%\] \[([a-z]*)\]\n\s*Front Right:[A-z,0-9,\s]*\[([0-9]*)%\] \[([a-z]*)\]', aux)
 # Set default values in case of something fails
 leftStatus = 'on'
 rightStatus = 'on'
 leftVol = 33
 rightVol = 33
-# Get volumes and status of speakers from amixer output
-for line in output:
-   if line.find('Front Left:') != -1:
-      leftStatus = line.split('[')[2].split(']')[0]
-      leftVol = int(line.split('[')[1].split('%')[0])
-   if line.find('Front Right:') != -1:
-      rightStatus = line.split('[')[2].split(']')[0]
-      rightVol = int(line.split('[')[1].split('%')[0])
-# Ugly way of knowing if headphones are plugged
-# (yup, i hate regexp)
-headphones = check_output(['amixer', '-c', '0', 'contents'], universal_newlines=True).split('numid=19')[1].split('\n')[2].split('=')[1]
+# Get volumes and status of speakers from amixer output with regexps
+leftStatus = output.group(2)
+rightStatus = output.group(4)
+leftVol = int(output.group(1))
+rightVol = int(output.group(3))
 
+# Regexp that returns if headphones are plugged
+aux = check_output(['amixer', '-c', '0', 'contents'], universal_newlines=True)
+headphones = re.search('numid=19.*\n.*\n\s*\:\svalues=(.*)', aux).group(1)
 #Calculate average volume of right and left speakers
 vol = int((leftVol + rightVol) / 2)
 
