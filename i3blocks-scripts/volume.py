@@ -13,10 +13,11 @@ rightStatus = 'on'
 leftVol = 33
 rightVol = 33
 # Get volumes and status of speakers from amixer output with regexps
-leftStatus = output.group(2)
-rightStatus = output.group(4)
-leftVol = int(output.group(1))
-rightVol = int(output.group(3))
+if output:
+   leftStatus = output.group(2)
+   rightStatus = output.group(4)
+   leftVol = int(output.group(1))
+   rightVol = int(output.group(3))
 
 # Regexp that returns if headphones are plugged
 aux = check_output(['amixer', '-c', '0', 'contents'], universal_newlines=True)
