@@ -24,11 +24,12 @@ if wifiState == 'up':
 		wifiIp = match.group(1);
 	aux = check_output(['nmcli', '-t', '-f', 'active,ssid', 'dev', 'wifi'], universal_newlines=True)
 	wifiSsid = '&lt;uncknown ssid&gt;'
-	match = re.search('^(sí|yes):(.*)', aux)
+	match = re.search('(sí|yes):(.*)', aux)
 	if match:
 		wifiSsid = match.group(2);
 	aux = check_output(['nmcli', '-t', '-f', 'active,signal', 'dev', 'wifi'], universal_newlines=True)
-	match = re.search('^(sí|yes):([0-9]*)', aux)
+	wifiSignal = 0
+	match = re.search('(sí|yes):([0-9]*\n)', aux)
 	if match:
 		wifiSignal = int(match.group(2));
 # If eth link is up we get its ip
@@ -39,23 +40,23 @@ if ethState == 'up':
 		ethIp = match.group(1);
 output=''
 def color(percent):
-  if percent < 10:
+	if percent < 10:
 		return "#FFFFFF"
-  if percent < 20:
+	if percent < 20:
 		return "#FF0000"
-  if percent < 30:
+	if percent < 30:
 		return "#FF3300"
-  if percent < 40:
+	if percent < 40:
 		return "#FF6600"
-  if percent < 50:
+	if percent < 50:
 		return "#FF9900"
-  if percent < 60:
+	if percent < 60:
 		return "#FFCC00"
-  if percent < 70:
+	if percent < 70:
 		return "#FFFF00"
-  if percent < 80:
+	if percent < 80:
 		return "#CCFF00"
-  return "#00FF00"
+	return "#00FF00"
 if (wifiState == 'down') & (ethState == 'down'):
 	output = '<span color="red"><span font="FontAwesome">\uf00d</span> NOT CONNECTED</span>'
 if wifiState == 'up':
