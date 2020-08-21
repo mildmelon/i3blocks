@@ -1,7 +1,5 @@
 #!/bin/python
-# Custom i3blocks python script for displaying current screen brightness
-#
-# Those are the brightness paths on my laptop, change it properly
+# Custom i3blocks python script for displaying current screen brightness.
 
 import math
 
