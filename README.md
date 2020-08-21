@@ -1,7 +1,7 @@
 # i3blocks scripts
-Those are just a bunch of Python 3 scripts that I'm currently using on my laptop to replace i3blocks default ones. Feel free to use them, fork the project, ask something or submit some bugfixes.
+These are just a bunch of Python 3 scripts that I'm currently using on my laptop to replace i3blocks default ones. Feel free to use them, fork the project, ask something or submit some bugfixes.
 
-As you can see, those scripts doesn't support a wide variety of hardware, and thats because it has only been tested on one laptop. If you want to use them, you'll probably need to modify some variable values on the first lines of each script as explained bellow.
+As you can see, those scripts doesn't support a wide variety of hardware, and thats because it has only been tested on one laptop. If you want to use them, you'll probably need to modify some variable values on the first lines of each script as explained below.
 
 I'll try to provide a more user friendly way to configure those scripts but I don't promise that it will be soon.
 
